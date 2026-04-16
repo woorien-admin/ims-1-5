@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Playfair Display", serif;
+}
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  
+  --ink-primary: #0f172a;
+  --ink-secondary: #475569;
+  --ink-tertiary: #94a3b8;
+  
+  --accent-primary: #2563eb;
+  --accent-secondary: #3b82f6;
+  
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+  
+  --status-waiting: #f59e0b;
+  --status-progress: #3b82f6;
+  --status-complete: #10b981;
+  --status-danger: #ef4444;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 24px;
+}
+
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  
+  --ink-primary: #f8fafc;
+  --ink-secondary: #cbd5e1;
+  --ink-tertiary: #64748b;
+  
+  --border-subtle: #1e293b;
+  --border-strong: #334155;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-secondary)] text-[var(--ink-primary)] font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-[var(--accent-primary)] text-white rounded-[var(--radius-md)] font-bold text-sm hover:bg-blue-700 transition-all shadow-sm active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-[var(--bg-primary)] text-[var(--ink-primary)] border border-[var(--border-strong)] rounded-[var(--radius-md)] font-bold text-sm hover:bg-[var(--bg-tertiary)] transition-all active:scale-[0.98];
+  }
+
+  .card {
+    @apply bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-[var(--radius-lg)] shadow-sm;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-strong)] rounded-[var(--radius-md)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-tertiary);
+}
