@@ -35,53 +35,139 @@ interface CounselingManagementProps {
   activeTab?: string;
 }
 
-const mockInquiries = Array.from({ length: 30 }, (_, i) => {
-  const hospitals = ['준동물병원(서울 광진)', '맑은 동물의료센터(인천)', '우리동네동물병원', '미등록병원', '튼튼동물병원', '행복동물병원'];
-  const categories = ['EMR', '이미징CS', 'App', '마이브라운', '네이버', '이미지영업', 'EMR영업', 'AI', '우리엔CRM', '미지정'];
-  const authors = ['박정훈', '송해영', '김나리', '이가영'];
-  const statuses = ['대기 중', '상담 중', '완료'];
-  const processingOptions = ['중복', '수신거부', '백업관리', '부재', '네트워크', 'update오류', '단순문의', '원격지원', '방문요청', '기능개선'];
-  const source = i % 2 === 0 ? 'Online' : 'Phone';
-  const category = source === 'Online' ? '미지정' : categories[i % categories.length];
-  const initialStatus = statuses[i % statuses.length];
-  const assignee = (category === 'EMR' || initialStatus === '상담 중' || initialStatus === '완료') ? '이가영' : (i % 3 === 0 ? '박정훈' : '');
-  
-  const hospital = hospitals[i % hospitals.length];
-  const processingResult = initialStatus === '완료' ? `${processingOptions[i % processingOptions.length]}\n원인: 결과 확인\n결과: 처리 완료` : '';
-  
-  return {
-    id: `2026040${7 - Math.floor(i/10)}${String(i + 1).padStart(4, '0')}`,
-    category,
-    emrType: i % 2 === 0 ? 'eFriends' : 'PMS365',
-    chart: hospital === '미등록병원' ? '기타' : (i % 3 === 0 ? 'PMS365' : '기타'),
-    hospital,
-    time: `2026-04-0${7 - Math.floor(i/10)} 1${i % 9}:15:43`,
-    initialStatus,
+const mockInquiries = [
+  {
+    id: '202604160001',
+    category: '미지정',
+    emrType: 'PMS365',
+    chart: '기타',
+    hospital: '준동물병원(서울 광진)',
+    time: '2026-04-16 10:15:43',
+    initialStatus: '대기 중',
     followUpStatus: '-',
-    author: category === '미지정' ? '-' : authors[i % authors.length],
-    assignee,
-    source,
-    customerResponse: i % 5 === 0 ? '빠른 확인 부탁드립니다.' : '',
-    urgent: i % 7 === 0,
-    isReentry: i % 7 !== 0 && i % 8 === 0,
-    waitingTime: `${(i + 1) * 3}분`,
-    processingResult,
-    history: Array.from({ length: 5 }, (_, j) => ({
-      date: `2026-04-07 1${i % 9}:${String(59 - j).padStart(2, '0')}:10`,
-      status: j === 0 ? initialStatus : '상담 중',
-      content: j === 0 ? (processingResult || '상담 진행 중') : `상담 진행 중... (${5 - j}단계)`,
-      author: authors[j % authors.length],
-      wcsmLink: j % 5 === 0 ? `https://wcsm.example.com/case/${i}${j}` : undefined,
-      images: j === 0 && initialStatus === '완료' ? ['https://picsum.photos/seed/cs1/400/300', 'https://picsum.photos/seed/cs2/400/300'] : []
-    })),
-    customerHistory: source === 'Online' ? Array.from({ length: 3 }, (_, j) => ({
-      date: `2026-04-07 15:${String(59 - j).padStart(2, '0')}:22`,
-      content: `고객 답변 발송 테스트 데이터입니다. (${3 - j}회차)`,
-      author: '이가영',
-      images: j === 0 ? ['https://picsum.photos/seed/resp1/400/300'] : []
-    })) : []
-  };
-});
+    author: '-',
+    assignee: '',
+    source: 'Online',
+    customerResponse: '',
+    urgent: false,
+    isReentry: false,
+    waitingTime: '5분',
+    processingResult: '',
+    history: [],
+    customerHistory: []
+  },
+  {
+    id: '202604160002',
+    category: 'EMR',
+    emrType: 'eFriends',
+    chart: 'PMS365',
+    hospital: '맑은 동물의료센터(인천)',
+    time: '2026-04-16 11:20:10',
+    initialStatus: '상담 중',
+    followUpStatus: '-',
+    author: '박정훈',
+    assignee: '이가영',
+    source: 'Phone',
+    customerResponse: '',
+    urgent: true,
+    isReentry: false,
+    waitingTime: '2분',
+    processingResult: '',
+    history: [
+      {
+        date: '2026-04-16 11:25:00',
+        status: '상담 중',
+        content: '상담 시작함',
+        author: '이가영',
+        images: []
+      }
+    ],
+    customerHistory: []
+  },
+  {
+    id: '202604160003',
+    category: '이미징CS',
+    emrType: 'PMS365',
+    chart: '기타',
+    hospital: '우리동네동물병원',
+    time: '2026-04-16 12:05:22',
+    initialStatus: '완료',
+    followUpStatus: '-',
+    author: '김나리',
+    assignee: '박정훈',
+    source: 'Online',
+    customerResponse: '',
+    urgent: false,
+    isReentry: true,
+    waitingTime: '10분',
+    processingResult: '단순문의\n원인: 사용법 미숙\n결과: 설명 완료',
+    history: [
+      {
+        date: '2026-04-16 12:30:00',
+        status: '완료',
+        content: '단순문의\n원인: 사용법 미숙\n결과: 설명 완료',
+        author: '박정훈',
+        images: ['https://picsum.photos/seed/test1/400/300']
+      }
+    ],
+    customerHistory: [
+      {
+        date: '2026-04-16 12:25:00',
+        content: '문의하신 내용에 대해 답변 드립니다.',
+        author: '박정훈',
+        images: []
+      }
+    ]
+  },
+  {
+    id: '202604160004',
+    category: 'App',
+    emrType: 'PMS365',
+    chart: '기타',
+    hospital: '튼튼동물병원',
+    time: '2026-04-16 13:45:15',
+    initialStatus: '대기 중',
+    followUpStatus: '-',
+    author: '이가영',
+    assignee: '',
+    source: 'Phone',
+    customerResponse: '',
+    urgent: false,
+    isReentry: false,
+    waitingTime: '1분',
+    processingResult: '',
+    history: [],
+    customerHistory: []
+  },
+  {
+    id: '202604160005',
+    category: '네이버',
+    emrType: 'PMS365',
+    chart: '기타',
+    hospital: '행복동물병원',
+    time: '2026-04-16 14:10:30',
+    initialStatus: '상담 중',
+    followUpStatus: '-',
+    author: '송해영',
+    assignee: '김나리',
+    source: 'Online',
+    customerResponse: '예약 확인 부탁드려요.',
+    urgent: false,
+    isReentry: false,
+    waitingTime: '15분',
+    processingResult: '',
+    history: [
+      {
+        date: '2026-04-16 14:15:00',
+        status: '상담 중',
+        content: '예약 내역 확인 중',
+        author: '김나리',
+        images: []
+      }
+    ],
+    customerHistory: []
+  }
+];
 
 const CATEGORIES = ['전체', 'EMR', '이미징CS', 'App', '마이브라운', '네이버', '이미지영업', 'EMR영업', 'AI', '우리엔CRM', '미지정'];
 const EMR_TYPES = ['전체', 'eFriends', 'ef365', 'PMS1.0', 'PMS365', '기타'];
@@ -122,6 +208,8 @@ export default function CounselingManagement({ user }: CounselingManagementProps
   const [processingImages, setProcessingImages] = useState<string[]>([]);
   const [customerResponseImages, setCustomerResponseImages] = useState<string[]>([]);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [completionModal, setCompletionModal] = useState<{ isOpen: boolean; id: string | null }>({ isOpen: false, id: null });
+  const [selectedProcessingType, setSelectedProcessingType] = useState('');
 
   useEffect(() => {
     if (selectedId) {
@@ -150,32 +238,74 @@ export default function CounselingManagement({ user }: CounselingManagementProps
   const handleAssignToMe = (id: string) => {
     setInquiries(prev => prev.map(inq => {
       if (inq.id === id) {
-        return { ...inq, assignee: user.name, initialStatus: '상담 중' };
+        return { ...inq, assignee: user.name };
       }
       return inq;
     }));
   };
 
+  // handleStatusChange 함수 수정
   const handleStatusChange = (id: string, newStatus: string) => {
+  const inquiry = inquiries.find(i => i.id === id);
+  
+  if (!inquiry) return;
+  
+  // 담당자가 없거나 현재 사용자가 담당자가 아닌 경우
+  if (!inquiry.assignee || inquiry.assignee !== user.name) {
+    const assigneeText = inquiry.assignee ? `담당자(${inquiry.assignee})` : '담당자';
+    const message = `상태를 '${newStatus}'로 변경하고 본인을 담당자로 배정하시겠습니까?`;
+    
+    if (!window.confirm(message)) {
+      return;
+    }
+  }
+  
+  console.log('상태 변경:', id, newStatus);
+  
+  setInquiries(prev => prev.map(inq => {
+    if (inq.id === id) {
+      let updatedAssignee = inq.assignee;
+      
+      // 항상 현재 사용자를 담당자로 배정
+      updatedAssignee = user.name;
+
+      if (newStatus === '완료') {
+        setCompletionModal({ isOpen: true, id });
+        return { ...inq, initialStatus: newStatus, assignee: updatedAssignee };
+      }
+      
+      const updatedInq = { ...inq, initialStatus: newStatus, assignee: updatedAssignee };
+      
+      if (newStatus === '완료' && !updatedInq.processingResult) {
+        updatedInq.processingResult = '원인: \n결과: ';
+      }
+      
+      console.log('업데이트된 항목:', updatedInq);
+      return updatedInq;
+    }
+    return inq;
+  }));
+};
+
+  const handleConfirmCompletion = () => {
+    if (!completionModal.id || !selectedProcessingType) {
+      alert("처리 유형을 선택해주세요.");
+      return;
+    }
+
     setInquiries(prev => prev.map(inq => {
-      if (inq.id === id) {
-        // Validation: Status change requires assignee for '상담 중', '피드백', '완료'
-        if (['상담 중', '피드백', '완료'].includes(newStatus) && !inq.assignee) {
-          alert(`${newStatus} 상태로 변경하려면 담당자가 지정되어야 합니다.`);
-          return inq;
-        }
-        
-        const updatedInq = { ...inq, initialStatus: newStatus };
-        
-        // If status is changed to '완료', pre-populate processing result if empty with template
-        if (newStatus === '완료' && !updatedInq.processingResult) {
-          updatedInq.processingResult = '원인: \n결과: ';
-        }
-        
-        return updatedInq;
+      if (inq.id === completionModal.id) {
+        return { 
+          ...inq, 
+          initialStatus: '완료', 
+          processingResult: `${selectedProcessingType}\n원인: \n결과: ` 
+        };
       }
       return inq;
     }));
+
+    setCompletionModal({ isOpen: false, id: null });
+    setSelectedProcessingType('');
   };
 
   const handleResetStatus = (id: string) => {
@@ -335,40 +465,43 @@ export default function CounselingManagement({ user }: CounselingManagementProps
     return { total, waiting, processing, completed };
   }, [dashboardInquiries]);
 
-  const filteredInquiries = useMemo(() => {
-    return inquiries.filter(inquiry => {
-      // Category filter
-      if (mainFilter !== '전체' && inquiry.category !== mainFilter) return false;
-      
-      // EMR Type filter
-      if (mainFilter === 'EMR' && emrFilter !== '전체' && inquiry.emrType !== emrFilter) return false;
-      
-      // Assignee filter
-      if (assigneeFilter !== '전체' && inquiry.assignee !== assigneeFilter) return false;
+  // filteredInquiries useMemo의 의존성 배열 확인
+const filteredInquiries = useMemo(() => {
+  return inquiries.filter(inquiry => {
+    // Category filter
+    if (mainFilter !== '전체' && inquiry.category !== mainFilter) return false;
+    
+    // EMR Type filter
+    if (mainFilter === 'EMR' && emrFilter !== '전체' && inquiry.emrType !== emrFilter) return false;
+    
+    // Assignee filter
+    if (assigneeFilter !== '전체' && inquiry.assignee !== assigneeFilter) return false;
 
-      // Status filter
-      if (statusFilter !== '전체' && inquiry.initialStatus !== statusFilter) return false;
+    // Status filter
+    if (statusFilter !== '전체' && inquiry.initialStatus !== statusFilter) return false;
 
-      // Process filter (Category in processingResult)
-      if (processFilter !== '전체') {
-        const firstLine = inquiry.processingResult?.split('\n')[0];
-        if (firstLine !== processFilter) return false;
-      }
-      
-      // Hospital filter
-      if (appliedHospitalFilter && !inquiry.hospital.toLowerCase().includes(appliedHospitalFilter.toLowerCase())) return false;
-      
-      // Content search
-      if (appliedContentSearch) {
-        const searchLower = appliedContentSearch.toLowerCase();
-        const matchesId = inquiry.id.toLowerCase().includes(searchLower);
-        const matchesResponse = inquiry.customerResponse?.toLowerCase().includes(searchLower);
-        if (!matchesId && !matchesResponse) return false;
-      } 
-      
-      return true;
-    });
-  }, [mainFilter, emrFilter, assigneeFilter, statusFilter, processFilter, appliedHospitalFilter, appliedContentSearch]);
+    // Process filter
+    if (processFilter !== '전체') {
+      const firstLine = inquiry.processingResult?.split('\n')[0];
+      if (firstLine !== processFilter) return false;
+    }
+    
+    // Hospital filter
+    if (appliedHospitalFilter && !inquiry.hospital.toLowerCase().includes(appliedHospitalFilter.toLowerCase())) return false;
+    
+    // Content search
+    if (appliedContentSearch) {
+      const searchLower = appliedContentSearch.toLowerCase();
+      const matchesId = inquiry.id.toLowerCase().includes(searchLower);
+      const matchesResponse = inquiry.customerResponse?.toLowerCase().includes(searchLower);
+      if (!matchesId && !matchesResponse) return false;
+    } 
+    
+    return true;
+  });
+}, [inquiries, mainFilter, emrFilter, assigneeFilter, statusFilter, processFilter, appliedHospitalFilter, appliedContentSearch]);
+
+
 
   const resetFilters = () => {
     setMainFilter('전체');
@@ -912,7 +1045,7 @@ const handleUpdateResponse = (index: number) => {
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center gap-0.5 min-w-[32px]">
-                         <div className="flex items-center gap-0.5 min-w-[32px]">
+                          <div className="flex items-center gap-0.5 min-w-[32px]">
   {item.urgent && (
     <span title="긴급">
       <CheckCircle2 size={14} className="text-red-500 fill-red-50" />
@@ -930,7 +1063,7 @@ const handleUpdateResponse = (index: number) => {
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="flex flex-col">
-                        <span className="text-[11px] font-bold text-slate-700">{item.category}</span>
+                        <span className="text-[11px] font-bold text-slate-700">{item.category === '미지정' ? '-' : item.category}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3.5">
@@ -951,72 +1084,78 @@ const handleUpdateResponse = (index: number) => {
                         <span className="text-[11px] font-bold text-slate-600">{item.waitingTime || '-'}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3.5">
-                      {item.initialStatus === '완료' ? (
-                        <div className="flex flex-col gap-1">
-                          <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded w-fit">
-                            {item.initialStatus}
-                          </span>
-                          <span className="text-[9px] font-bold text-slate-400">
-                            {item.processingResult?.split('\n')[0] || '-'}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="relative group/status inline-block">
-                          <select
-                            value={item.initialStatus}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) => handleStatusChange(item.id, e.target.value)}
-                            className={cn(
-                              "appearance-none px-2 py-0.5 pr-4 rounded text-[10px] font-bold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20",
-                              item.initialStatus === '대기 중' ? "bg-amber-50 text-amber-600 border-amber-100" :
-                              item.initialStatus === '상담 중' ? "bg-blue-50 text-blue-600 border-blue-100" :
-                              item.initialStatus === '피드백' ? "bg-purple-50 text-purple-600 border-purple-100" :
-                              "bg-slate-50 text-slate-600 border-slate-100"
-                            )}
-                          >
-                            <option value={item.initialStatus}>{item.initialStatus}</option>
-                            {item.initialStatus === '대기 중' && (
-                              <>
-                                <option value="상담 중">상담 중</option>
-                                <option value="완료">완료</option>
-                              </>
-                            )}
-                            {item.initialStatus === '상담 중' && (
-                              <>
-                                <option value="피드백">피드백</option>
-                                <option value="완료">완료</option>
-                              </>
-                            )}
-                            {item.initialStatus === '피드백' && (
-                              <>
-                                <option value="상담 중">상담 중</option>
-                                <option value="완료">완료</option>
-                              </>
-                            )}
-                          </select>
-                          <div className="absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-[8px] opacity-50">
-                            ▼
-                          </div>
-                        </div>
-                      )}
-                    </td>
+                
+<td className="px-4 py-3.5">
+  {item.initialStatus === '완료' ? (
+    <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded">
+      {item.initialStatus}
+    </span>
+  ) : (
+    <div className="relative group/status inline-block">
+      <select
+  key={`${item.id}-${item.initialStatus}`}
+  value={item.initialStatus}
+  onClick={(e) => e.stopPropagation()}
+  onChange={(e) => {
+    handleStatusChange(item.id, e.target.value);
+  }}
+  className={cn(
+    "appearance-none px-2 py-0.5 pr-4 rounded text-[10px] font-bold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+    item.initialStatus === '대기 중' ? "bg-amber-50 text-amber-600 border-amber-100" :
+    item.initialStatus === '상담 중' ? "bg-blue-50 text-blue-600 border-blue-100" :
+    item.initialStatus === '피드백' ? "bg-purple-50 text-purple-600 border-purple-100" :
+    "bg-slate-50 text-slate-600 border-slate-100"
+  )}
+>
+  {item.initialStatus === '대기 중' && (
+    <>
+      <option value="대기 중">대기 중</option>
+      <option value="상담 중">상담 중</option>
+    </>
+  )}
+  {item.initialStatus === '상담 중' && (
+    <>
+      <option value="상담 중">상담 중</option>
+      <option value="피드백">피드백</option>
+      <option value="완료">완료</option>
+    </>
+  )}
+  {item.initialStatus === '피드백' && (
+    <>
+      <option value="피드백">피드백</option>
+      <option value="상담 중">상담 중</option>
+      <option value="완료">완료</option>
+    </>
+  )}
+</select>
+      <div className="absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-[8px] opacity-50">
+        ▼
+      </div>
+    </div>
+  )}
+</td>
                     <td className="px-4 py-3.5 text-xs text-slate-600">{item.author}</td>
                     <td className="px-4 py-3.5 text-xs text-slate-600 relative">
                       <div 
                         className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleResetStatus(item.id);
+                          handleAssignToMe(item.id);
                         }}
                       >
                         {item.assignee || '-'}
                       </div>
                     </td>
                     <td className="px-4 py-3.5">
-                      <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400">
-                        <MoreHorizontal size={14} />
-                      </button>
+                      {item.initialStatus === '완료' ? (
+                        <span className="text-[11px] font-bold text-slate-600">
+                          {item.processingResult?.split('\n')[0] || '-'}
+                        </span>
+                      ) : (
+                        <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400">
+                          <MoreHorizontal size={14} />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -1665,6 +1804,74 @@ const handleUpdateResponse = (index: number) => {
             >
               <X size={24} />
             </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Completion Modal */}
+      <AnimatePresence>
+        {completionModal.isOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+            >
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
+                  <CheckCircle2 size={18} className="text-green-600" />
+                  상담 완료 처리
+                </h3>
+                <button 
+                  onClick={() => setCompletionModal({ isOpen: false, id: null })}
+                  className="p-1 hover:bg-slate-200 rounded-full transition-colors text-slate-400"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-wider">처리 유형 (CR 유형) 선택</label>
+                  <select 
+                    value={selectedProcessingType}
+                    onChange={(e) => setSelectedProcessingType(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 h-12 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">처리 유형을 선택해주세요</option>
+                    {PROCESSING_OPTIONS.map(option => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
+                  상담을 완료 상태로 변경합니다. 선택하신 처리 유형이 '처리' 필드에 기록됩니다.
+                </p>
+              </div>
+              
+              <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button 
+                  onClick={() => setCompletionModal({ isOpen: false, id: null })}
+                  className="px-4 py-2 text-xs font-black text-slate-500 hover:bg-slate-200 rounded-lg transition-colors"
+                >
+                  취소
+                </button>
+                <button 
+                  onClick={handleConfirmCompletion}
+                  disabled={!selectedProcessingType}
+                  className="px-6 py-2 text-xs font-black text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 rounded-lg shadow-lg shadow-blue-500/20 transition-all"
+                >
+                  완료 처리
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
