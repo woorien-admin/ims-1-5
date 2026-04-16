@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
-import { UserRole, User as UserType } from '../types';
+import { CustomerHistoryItem, HistoryItem, UserRole, User as UserType } from '../types';
 import DateRangePicker from './DateRangePicker';
 
 interface CounselingManagementProps {
@@ -612,18 +612,16 @@ const handleUpdateResponse = (index: number) => {
             ...originalResponse,
             content: editResponseText,
             author: user.name,
-            isEdited: true,  // customerHistory에만 추가
+            isEdited: true,
             editDate: now
-          };
+          } as CustomerHistoryItem;
 
-          const editHistoryRecord = {
+          const editHistoryRecord: HistoryItem = {
             date: now,
             status: '답변수정',
             content: `[답변수정] ${editResponseText.substring(0, 20)}${editResponseText.length > 20 ? '...' : ''}`,
             author: user.name,
-            wcsmLink: undefined,
             images: []
-            // isEdited 제거
           };
 
           return {
