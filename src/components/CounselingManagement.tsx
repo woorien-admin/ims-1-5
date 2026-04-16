@@ -1132,27 +1132,28 @@ const handleUpdateResponse = (index: number) => {
 </td>
                     <td className="px-4 py-3.5 text-xs text-slate-600">{item.author}</td>
                     <td className="px-4 py-3.5 text-xs text-slate-600 relative">
-                      <div 
-                        className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAssignToMe(item.id);
-                        }}
-                      >
-                        {item.assignee || '-'}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3.5">
-                      {item.initialStatus === '완료' ? (
-                        <span className="text-[11px] font-bold text-slate-600">
-                          {item.processingResult?.split('\n')[0] || '-'}
-                        </span>
-                      ) : (
-                        <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400">
-                          <MoreHorizontal size={14} />
-                        </button>
-                      )}
-                    </td>
+  <div 
+    className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors"
+    onClick={(e) => {
+      e.stopPropagation();
+      if (item.assignee && item.assignee !== user.name) {
+        if (window.confirm("상담상태 및 담당자를 초기화하겠습니까?")) {
+          setInquiries(prev => prev.map(inq => 
+            inq.id === item.id 
+              ? { ...inq, assignee: user.name, initialStatus: '대기 중' } 
+              : inq
+          ));
+        }
+      } else if (!item.assignee) {
+        setInquiries(prev => prev.map(inq => 
+          inq.id === item.id ? { ...inq, assignee: user.name } : inq
+        ));
+      }
+    }}
+  >
+    {item.assignee || '-'}
+  </div>
+</td>
                   </tr>
                 ))}
               </tbody>
