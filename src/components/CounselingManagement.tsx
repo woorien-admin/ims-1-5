@@ -912,12 +912,18 @@ const handleUpdateResponse = (index: number) => {
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center gap-0.5 min-w-[32px]">
-                          {item.urgent && (
-                            <CheckCircle2 size={14} className="text-red-500 fill-red-50" title="긴급" />
-                          )}
-                          {item.isReentry && (
-                            <CheckCircle2 size={14} className="text-green-600 fill-green-50" title="재인입" />
-                          )}
+                         <div className="flex items-center gap-0.5 min-w-[32px]">
+  {item.urgent && (
+    <span title="긴급">
+      <CheckCircle2 size={14} className="text-red-500 fill-red-50" />
+    </span>
+  )}
+  {item.isReentry && (
+    <span title="재인입">
+      <CheckCircle2 size={14} className="text-green-600 fill-green-50" />
+    </span>
+  )}
+</div>
                         </div>
                         <span className="text-xs font-mono font-medium text-slate-600">{item.id}</span>
                       </div>
