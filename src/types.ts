@@ -1,40 +1,58 @@
-export const UserRole = {
-  ADMIN: 'ADMIN',
-  COUNSELOR: 'COUNSELOR',
-  EXTERNAL_COUNSELOR: 'EXTERNAL_COUNSELOR',
-  UNREGISTERED: 'UNREGISTERED',
-  RESIGNED: 'RESIGNED',
-} as const;
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  COUNSELOR = 'COUNSELOR',
+  USER = 'USER',
+  RESIGNED = 'RESIGNED',
+  UNREGISTERED = 'UNREGISTERED',
+  EXTERNAL_COUNSELOR = 'EXTERNAL_COUNSELOR'
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+}
 
 export interface User {
   id: string;
   name: string;
   role: UserRole;
   email: string;
-  department: string;
+  roles?: string[];
+  label?: string;
+  department?: string;
 }
 
-// history 객체 타입에서 wcsmLink를 선택적으로 변경
 export interface HistoryItem {
   date: string;
   status: string;
   content: string;
   author: string;
-  wcsmLink?: string;  // undefined 허용하도록 변경
+  wcsmLink?: string;
   images: string[];
 }
 
-// 또는 Inquiry 타입의 history 필드를 다음과 같이 수정
+export interface CustomerHistoryItem {
+  date: string;
+  content: string;
+  author: string;
+  images: string[];
+  isEdited?: boolean;
+  editDate?: string;
+}
+
 export interface Inquiry {
-  // ...existing fields...
-  history: {
-    date: string;
-    status: string;
-    content: string;
-    author: string;
-    wcsmLink?: string;  // 선택적으로 변경
-    images: string[];
-  }[];
+  id: string;
+  category: string;
+  emrType: string;
+  chart: string;
+  hospital: string;
+  time: string;
+  initialStatus: string;
+  followUpStatus: string;
+  author: string;
+  assignee: string;
+  source: string;
+  customerResponse: string;
+  urgent: boolean;
+  isReentry: boolean;
+  waitingTime: string;
+  processingResult: string;
+  history: HistoryItem[];
+  customerHistory: CustomerHistoryItem[];
 }
