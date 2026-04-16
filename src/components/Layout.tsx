@@ -44,58 +44,58 @@ export default function Layout({ children, activeTab, setActiveTab, user, onLogo
       icon: <MessageSquare size={18} />,
       subItems: []
     },
-    {
-      id: 'statistics',
-      label: '통계',
-      icon: <BarChart3 size={18} />,
-      subItems: [
-        { id: 'stats-chart', label: '차트별 유입현황' },
-        { id: 'stats-hospital', label: '병원별 유입현황' },
-        { id: 'stats-counselor-process', label: '상담자별 처리현황' },
-        { id: 'stats-counselor-register', label: '상담자별 등록현황' },
-        { id: 'stats-complete-time', label: '상담 완료시간' },
-        { id: 'stats-delay-time', label: '상담 지연시간' },
-        { id: 'stats-type', label: '유형별 통계' },
-        { id: 'stats-download', label: '데이터 다운로드', roles: [UserRole.ADMIN] },
-      ]
-    },
-    {
-      id: 'schedule',
-      label: '일정 관리',
-      icon: <Calendar size={18} />,
-      subItems: [
-        { id: 'schedule-work', label: '근무 일정 관리' },
-      ]
-    },
-    {
-      id: 'operation',
-      label: '운영 설정',
-      icon: <Settings size={18} />,
-      subItems: [
-        { id: 'op-accounts', label: '계정 관리' },
-        { id: 'op-assignment', label: '담당자 배정 관리' },
-        { id: 'op-goals', label: '운영 목표 관리' },
-        { id: 'op-cr-types', label: 'CR 유형 관리' },
-      ]
-    },
-    {
-      id: 'reference',
-      label: '업무 참조',
-      icon: <BookOpen size={18} />,
-      subItems: [
-        { id: 'ref-inspection', label: '검사 항목 관리' },
-        { id: 'ref-plan-category', label: 'Plan 카테고리 관리' },
-        { id: 'ref-plan', label: 'Plan 관리' },
-      ]
-    },
-    {
-      id: 'notice',
-      label: '공지사항',
-      icon: <Bell size={18} />,
-      subItems: [
-        { id: 'notice-register', label: '공지 사항 관리' },
-      ]
-    }
+    // {
+    //   id: 'statistics',
+    //   label: '통계',
+    //   icon: <BarChart3 size={18} />,
+    //   subItems: [
+    //     { id: 'stats-chart', label: '차트별 유입현황' },
+    //     { id: 'stats-hospital', label: '병원별 유입현황' },
+    //     { id: 'stats-counselor-process', label: '상담자별 처리현황' },
+    //     { id: 'stats-counselor-register', label: '상담자별 등록현황' },
+    //     { id: 'stats-complete-time', label: '상담 완료시간' },
+    //     { id: 'stats-delay-time', label: '상담 지연시간' },
+    //     { id: 'stats-type', label: '유형별 통계' },
+    //     { id: 'stats-download', label: '데이터 다운로드', roles: [UserRole.ADMIN] },
+    //   ]
+    // },
+    // {
+    //   id: 'schedule',
+    //   label: '일정 관리',
+    //   icon: <Calendar size={18} />,
+    //   subItems: [
+    //     { id: 'schedule-work', label: '근무 일정 관리' },
+    //   ]
+    // },
+    // {
+    //   id: 'operation',
+    //   label: '운영 설정',
+    //   icon: <Settings size={18} />,
+    //   subItems: [
+    //     { id: 'op-accounts', label: '계정 관리' },
+    //     { id: 'op-assignment', label: '담당자 배정 관리' },
+    //     { id: 'op-goals', label: '운영 목표 관리' },
+    //     { id: 'op-cr-types', label: 'CR 유형 관리' },
+    //   ]
+    // },
+    // {
+    //   id: 'reference',
+    //   label: '업무 참조',
+    //   icon: <BookOpen size={18} />,
+    //   subItems: [
+    //     { id: 'ref-inspection', label: '검사 항목 관리' },
+    //     { id: 'ref-plan-category', label: 'Plan 카테고리 관리' },
+    //     { id: 'ref-plan', label: 'Plan 관리' },
+    //   ]
+    // },
+    // {
+    //   id: 'notice',
+    //   label: '공지사항',
+    //   icon: <Bell size={18} />,
+    //   subItems: [
+    //     { id: 'notice-register', label: '공지 사항 관리' },
+    //   ]
+    // }
   ];
 
   const filteredMenuItems = menuItems.map(item => ({

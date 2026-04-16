@@ -14,10 +14,9 @@ import ReferenceFAQ from './components/ReferenceFAQ';
 import ReferenceNotice from './components/ReferenceNotice';
 import AdminSettings from './components/AdminSettings';
 import AdminSystem from './components/AdminSystem';
-import ScheduleManagement from './components/ScheduleMangement';
-import { UserRole, type User } from './types';
+import ScheduleManagement from './components/ScheduleManagement';
+import { UserRole, User } from './types';
 import { Lock } from 'lucide-react';
-
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('counseling');
@@ -26,6 +25,7 @@ export default function App() {
     email: 'admin@example.com',
     name: '관리자',
     role: UserRole.ADMIN,
+    department: '운영지원팀'
   });
 
   const handleLogout = () => {
@@ -80,7 +80,7 @@ export default function App() {
       // Schedule
       case 'schedule':
       case 'schedule-work':
-        return <ScheduleManagement activeTab={activeTab}  />;
+        return <ScheduleManagement activeTab={activeTab} />;
       
       // Operation / Admin
       case 'operation':
