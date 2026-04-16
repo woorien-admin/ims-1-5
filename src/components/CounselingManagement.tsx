@@ -250,9 +250,8 @@ export default function CounselingManagement({ user }: CounselingManagementProps
   
   if (!inquiry) return;
   
-  // 담당자가 없거나 현재 사용자가 담당자가 아닌 경우
-  if (!inquiry.assignee || inquiry.assignee !== user.name) {
-    const assigneeText = inquiry.assignee ? `담당자(${inquiry.assignee})` : '담당자';
+  // 담당자가 있고 현재 사용자가 아닌 경우에만 확인 알럿 표시
+  if (inquiry.assignee && inquiry.assignee !== user.name) {
     const message = `상태를 '${newStatus}'로 변경하고 본인을 담당자로 배정하시겠습니까?`;
     
     if (!window.confirm(message)) {
@@ -264,10 +263,8 @@ export default function CounselingManagement({ user }: CounselingManagementProps
   
   setInquiries(prev => prev.map(inq => {
     if (inq.id === id) {
-      let updatedAssignee = inq.assignee;
-      
       // 항상 현재 사용자를 담당자로 배정
-      updatedAssignee = user.name;
+      const updatedAssignee = user.name;
 
       if (newStatus === '완료') {
         setCompletionModal({ isOpen: true, id });
@@ -285,6 +282,7 @@ export default function CounselingManagement({ user }: CounselingManagementProps
     }
     return inq;
   }));
+  
 };
 
   const handleConfirmCompletion = () => {
