@@ -1140,7 +1140,7 @@ const handleUpdateResponse = (index: number) => {
         if (window.confirm("상담상태 및 담당자를 초기화하겠습니까?")) {
           setInquiries(prev => prev.map(inq => 
             inq.id === item.id 
-              ? { ...inq, assignee: user.name, initialStatus: '대기 중' } 
+              ? { ...inq, assignee: '', initialStatus: '대기 중' } 
               : inq
           ));
         }
