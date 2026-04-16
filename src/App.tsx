@@ -17,7 +17,7 @@ import AdminSystem from './components/AdminSystem';
 import ScheduleManagement from './components/ScheduleMangement';
 import { UserRole, type User } from './types';
 import { Lock } from 'lucide-react';
-import './App.css';
+
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('counseling');
