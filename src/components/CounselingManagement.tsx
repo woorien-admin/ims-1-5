@@ -285,7 +285,7 @@ export default function CounselingManagement({ user }: CounselingManagementProps
   
 };
 
-  const handleConfirmCompletion = () => {
+   const handleConfirmCompletion = () => {
     if (!completionModal.id || !selectedProcessingType) {
       alert("처리 유형을 선택해주세요.");
       return;
@@ -293,10 +293,15 @@ export default function CounselingManagement({ user }: CounselingManagementProps
 
     setInquiries(prev => prev.map(inq => {
       if (inq.id === completionModal.id) {
+        const existingLines = (inq.processingResult || '').split('\n');
+        const updatedProcessingResult = existingLines.length > 1
+          ? [selectedProcessingType, ...existingLines.slice(1)].join('\n')
+          : `${selectedProcessingType}\n원인: \n결과: `;
+
         return { 
           ...inq, 
           initialStatus: '완료', 
-          processingResult: `${selectedProcessingType}\n원인: \n결과: ` 
+          processingResult: updatedProcessingResult 
         };
       }
       return inq;
@@ -1153,6 +1158,18 @@ const handleUpdateResponse = (index: number) => {
   >
     {item.assignee || '-'}
   </div>
+</td>
+
+<td className="px-4 py-3.5">
+  {item.initialStatus === '완료' ? (
+    <span className="text-[11px] font-bold text-slate-600">
+      {item.processingResult?.split('\n')[0] || '-'}
+    </span>
+  ) : (
+    <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400">
+      <MoreHorizontal size={14} />
+    </button>
+  )}
 </td>
                   </tr>
                 ))}
